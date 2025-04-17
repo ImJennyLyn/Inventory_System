@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Activity Logs</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .content {
+      margin-left: 260px;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="sidebar-placeholder"></div>
+
+  <div id="app">
+    <div class="content">
+      <h2>Activity Logs</h2>
+      <table border="1" cellpadding="5">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>User</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="log in logs">
+            <td>{{ log.date }}</td>
+            <td>{{ log.user }}</td>
+            <td>{{ log.action }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    fetch('sidebar.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('sidebar-placeholder').innerHTML = data;
+      });
+
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          logs: []
+        };
+      },
+      mounted() {
+        fetch('/api/logs.php')
+          .then(res => res.json())
+          .then(data => {
+            this.logs = data;
+          });
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
