@@ -81,10 +81,18 @@
 </style>
 
 <script>
-  const toggleBtn = document.getElementById('toggleSidebarBtn');
-  const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggleSidebarBtn');
+    const sidebar = document.getElementById('sidebar');
+  
+    toggleBtn.addEventListener('click', () => {
+      // Toggle the "collapsed" class on sidebar
+      sidebar.classList.toggle('collapsed');
 
-  toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('collapsed');
-  });
+      // Also toggle the icon (☰ / ×) for better UX
+      if (sidebar.classList.contains('collapsed')) {
+        toggleBtn.innerHTML = '☰'; // Hamburger icon
+      } else {
+        toggleBtn.innerHTML = '×'; // Close icon
+      }
+    });
 </script>
