@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Users</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .content {
+      margin-left: 260px;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="sidebar-placeholder"></div>
+
+  <div id="app">
+    <div class="content">
+      <h2>Users</h2>
+      <table border="1" cellpadding="5">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users">
+            <td>{{ user.name }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              <button @click="editUser(user)">Edit</button>
+              <button @click="deleteUser(user.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    fetch('sidebar.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('sidebar-placeholder').innerHTML = data;
+      });
+
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          users: []
+        };
+      },
+      mounted() {
+        fetch('/api/users.php')
+          .then(res => res.json())
+          .then(data => {
+            this.users = data;
+          });
+      },
+      methods: {
+        editUser(user) {
+          alert("Edit user: " + user.name);
+        },
+        deleteUser(id) {
+          if (confirm("Delete this user?")) {
+            fetch('/api/delete_user.php?id=' + id)
+              .then(() => {
+                this.users = this.users.filter(u => u.id !== id);
+              });
+          }
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
