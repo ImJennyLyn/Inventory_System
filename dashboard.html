@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h2>Welcome to your Dashboard</h2>
+    <p>Here is your dashboard content.</p>
+    
+    <button @click="logout">Logout</button>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      methods: {
+        logout() {
+          // Example logout logic
+          window.location.href = "index.html"; // Redirect to login page
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
