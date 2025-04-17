@@ -5,15 +5,23 @@
   <title>Dashboard</title>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <style>
+    /* Content styling */
     .content {
-      margin-left: 260px;
+      margin-left: 260px; /* Default width when sidebar is expanded */
       padding: 20px;
+      transition: margin-left 0.3s ease; /* Smooth transition */
+    }
+
+    .content.full-width {
+      margin-left: 3rem; /* When sidebar is collapsed, remove the left margin */
     }
   </style>
 </head>
 <body>
+  <!-- Placeholder for the Sidebar -->
   <div id="sidebar-placeholder"></div>
 
+  <!-- Main Content -->
   <div id="app">
     <div class="content">
       <h2>Dashboard</h2>
@@ -26,13 +34,31 @@
   </div>
 
   <script>
-    // Load the sidebar.html into the page
+    // Load the sidebar from the external sidebar.html file
     fetch('sidebar.html')
       .then(response => response.text())
       .then(data => {
         document.getElementById('sidebar-placeholder').innerHTML = data;
+
+        // Sidebar toggle logic
+        const toggleBtn = document.getElementById('toggleSidebarBtn');
+        const sidebar = document.getElementById('sidebar');
+        const content = document.querySelector('.content'); // Content container
+
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('collapsed');  // Toggle the collapsed class for the sidebar
+          content.classList.toggle('full-width'); // Toggle the full-width class for the content
+
+          // Toggle icon for collapsed state
+          if (sidebar.classList.contains('collapsed')) {
+            toggleBtn.innerHTML = '☰';  // Hamburger icon
+          } else {
+            toggleBtn.innerHTML = '×';  // Close icon
+          }
+        });
       });
 
+    // Vue.js logic for the dashboard data
     const { createApp } = Vue;
     createApp({
       data() {
