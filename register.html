@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h2>Register</h2>
+    <input v-model="username" placeholder="Username" />
+    <input type="password" v-model="password" placeholder="Password" />
+    <button @click="register">Register</button>
+    <p>{{ message }}</p>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          username: '',
+          password: '',
+          message: ''
+        }
+      },
+      methods: {
+        register() {
+          fetch('register.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              username: this.username,
+              password: this.password
+            })
+          })
+          .then(res => res.json())
+          .then(data => {
+            this.message = data.status === "success" ? "Registered successfully!" : "Error: " + data.message;
+          });
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

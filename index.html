@@ -1,0 +1,62 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h2>Login</h2>
+    
+    <input v-model="username" placeholder="Username" />
+    <input type="password" v-model="password" placeholder="Password" />
+    
+    <button @click="login">Login</button>
+    
+    <p>{{ message }}</p>
+    
+    <!-- Register Redirect Button -->
+    <p>
+      Don't have an account?
+      <button @click="goToRegister">Register</button>
+    </p>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          username: '',
+          password: '',
+          message: ''
+        }
+      },
+      methods: {
+        login() {
+          fetch('login.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              username: this.username,
+              password: this.password
+            })
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.status === "success") {
+              this.message = "Login successful! Welcome, " + data.username;
+            } else {
+              this.message = "Login failed: " + data.message;
+            }
+          });
+        },
+        goToRegister() {
+          window.location.href = "register.html";
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
