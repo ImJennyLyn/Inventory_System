@@ -6,6 +6,7 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
+    <div id="sidebar-placeholder"></div>
   <div id="app">
     <h2>Inventory</h2>
     <input v-model="search" placeholder="Search items" />
@@ -39,6 +40,14 @@
   </div>
 
   <script>
+    
+  fetch('sidebar.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('sidebar-placeholder').innerHTML = data;
+    });
+
+
     const { createApp } = Vue;
     createApp({
       data() {

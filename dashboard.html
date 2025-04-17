@@ -5,66 +5,34 @@
   <title>Dashboard</title>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <style>
-    /* Sidebar styles */
-    .sidebar {
-      width: 250px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      background-color: #2c3e50;
-      padding-top: 20px;
-      color: white;
-    }
-    .sidebar a {
-      display: block;
-      color: white;
-      padding: 10px;
-      text-decoration: none;
-      margin: 10px 0;
-    }
-    .sidebar a:hover {
-      background-color: #34495e;
-    }
     .content {
-      margin-left: 260px; /* Adjust this to make space for the sidebar */
+      margin-left: 260px;
       padding: 20px;
     }
-    .container {
-      display: flex;
-    }
-    /* Add more styling for the dashboard content if needed */
   </style>
 </head>
 <body>
-  <div id="app">
-    <div class="container">
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <h2>Inventory System</h2>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="inventory.html">Inventory</a>
-        <a href="stock.html">Stock In/Out</a>
-        <a href="reports.html">Reports</a>
-        <a href="users.html">Users</a>
-        <a href="logs.html">Activity Logs</a>
-      </div>
-      
+  <div id="sidebar-placeholder"></div>
 
-      <!-- Main Content -->
-      <div class="content">
-        <h2>Dashboard</h2>
-        <div>
-          <p>Total Items: {{ totalItems }}</p>
-          <p>Items Low in Stock: {{ lowStock }}</p>
-          <p>Recent Activity: {{ recentActivity }}</p>
-          <!-- Add a chart here -->
-        </div>
+  <div id="app">
+    <div class="content">
+      <h2>Dashboard</h2>
+      <div>
+        <p>Total Items: {{ totalItems }}</p>
+        <p>Items Low in Stock: {{ lowStock }}</p>
+        <p>Recent Activity: {{ recentActivity }}</p>
       </div>
     </div>
   </div>
 
   <script>
+    // Load the sidebar.html into the page
+    fetch('sidebar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('sidebar-placeholder').innerHTML = data;
+      });
+
     const { createApp } = Vue;
     createApp({
       data() {
@@ -79,17 +47,13 @@
       },
       methods: {
         fetchDashboardData() {
-          fetch('/api/dashboard.php')  // Backend API to fetch dashboard data
+          fetch('/api/dashboard.php')
             .then(res => res.json())
             .then(data => {
               this.totalItems = data.totalItems;
               this.lowStock = data.lowStock;
               this.recentActivity = data.recentActivity;
             });
-        },
-        navigate(page) {
-          // Redirect to the clicked page
-          window.location.href = `/${page}`;
         }
       }
     }).mount('#app');
