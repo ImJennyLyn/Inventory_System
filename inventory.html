@@ -4,49 +4,80 @@
   <meta charset="UTF-8" />
   <title>Inventory</title>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .content {
+      margin-left: 260px;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      padding: 6px 12px;
+      margin: 2px;
+    }
+
+    input {
+      padding: 6px;
+      margin-right: 10px;
+    }
+  </style>
 </head>
 <body>
-    <div id="sidebar-placeholder"></div>
-  <div id="app">
-    <h2>Inventory</h2>
-    <input v-model="search" placeholder="Search items" />
-    <button @click="loadItems">Search</button>
+  <div id="sidebar-placeholder"></div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Item Name</th>
-          <th>Category</th>
-          <th>Quantity</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in items" :key="item.id">
-          <td>{{ item.name }}</td>
-          <td>{{ item.category }}</td>
-          <td>{{ item.quantity }}</td>
-          <td>{{ item.status }}</td>
-          <td>
-            <button @click="editItem(item.id)">Edit</button>
-            <button @click="deleteItem(item.id)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    
-    <pagination :page="page" @page-changed="loadItems"></pagination>
+  <div id="app">
+    <div class="content">
+      <h2>Inventory</h2>
+      <input v-model="search" placeholder="Search items" />
+      <button @click="loadItems">Search</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in items" :key="item.id">
+            <td>{{ item.name }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.status }}</td>
+            <td>
+              <button @click="editItem(item.id)">Edit</button>
+              <button @click="deleteItem(item.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
-    
-  fetch('sidebar.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('sidebar-placeholder').innerHTML = data;
-    });
-
+    fetch('sidebar.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('sidebar-placeholder').innerHTML = data;
+      });
 
     const { createApp } = Vue;
     createApp({
