@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inventory</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h2>Inventory</h2>
+    <input v-model="search" placeholder="Search items" />
+    <button @click="loadItems">Search</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Item Name</th>
+          <th>Category</th>
+          <th>Quantity</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in items" :key="item.id">
+          <td>{{ item.name }}</td>
+          <td>{{ item.category }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.status }}</td>
+          <td>
+            <button @click="editItem(item.id)">Edit</button>
+            <button @click="deleteItem(item.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <pagination :page="page" @page-changed="loadItems"></pagination>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          items: [],
+          search: '',
+          page: 1
+        };
+      },
+      methods: {
+        loadItems() {
+          fetch(`/api/items.php?page=${this.page}&search=${this.search}`)
+            .then(res => res.json())
+            .then(data => {
+              this.items = data.items;
+            });
+        },
+        editItem(id) {
+          window.location.href = `/inventory/edit/${id}`;
+        },
+        deleteItem(id) {
+          if (confirm('Are you sure you want to delete this item?')) {
+            fetch(`/api/items.php?id=${id}`, { method: 'DELETE' })
+              .then(() => this.loadItems());
+          }
+        }
+      },
+      created() {
+        this.loadItems();
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
