@@ -11,7 +11,14 @@
     <input v-model="username" placeholder="Username" />
     <input type="password" v-model="password" placeholder="Password" />
     <button @click="register">Register</button>
+    
     <p>{{ message }}</p>
+    
+    <!-- Back to Login button -->
+    <p>
+      Already have an account?
+      <button @click="goToLogin">Back to Login</button>
+    </p>
   </div>
 
   <script>
@@ -26,7 +33,7 @@
       },
       methods: {
         register() {
-          fetch('register.php', {
+          fetch('http://localhost/Inventory System/register.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -38,6 +45,9 @@
           .then(data => {
             this.message = data.status === "success" ? "Registered successfully!" : "Error: " + data.message;
           });
+        },
+        goToLogin() {
+          window.location.href = "index.html"; // Redirects to the login page
         }
       }
     }).mount('#app');
