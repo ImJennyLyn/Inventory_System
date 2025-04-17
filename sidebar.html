@@ -1,33 +1,90 @@
-<div class="sidebar">
-    <h2>Inventory System</h2>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="inventory.html">Inventory</a>
-    <a href="stock.html">Stock In/Out</a>
-    <a href="reports.html">Reports</a>
-    <a href="users.html">Users</a>
-    <a href="logs.html">Activity Logs</a>
-  </div>
-  
-  <style>
-    .sidebar {
-      width: 250px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      background-color: #2c3e50;
-      padding-top: 20px;
-      color: white;
-    }
-    .sidebar a {
-      display: block;
-      color: white;
-      padding: 10px;
-      text-decoration: none;
-      margin: 10px 0;
-    }
-    .sidebar a:hover {
-      background-color: #34495e;
-    }
-  </style>
-  
+<!-- Include Font Awesome CDN for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+<!-- Toggle Button -->
+<button id="toggleSidebarBtn" style="position: fixed; top: 10px; left: 10px; z-index: 999;">☰</button>
+
+<div class="sidebar expanded" id="sidebar">
+  <h2 class="sidebar-title">Inventory System</h2>
+  <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span class="link-text">Dashboard</span></a>
+  <a href="inventory.html"><i class="fas fa-boxes"></i><span class="link-text">Inventory</span></a>
+  <a href="stock.html"><i class="fas fa-exchange-alt"></i><span class="link-text">Stock In/Out</span></a>
+  <a href="reports.html"><i class="fas fa-chart-line"></i><span class="link-text">Reports</span></a>
+  <a href="users.html"><i class="fas fa-users"></i><span class="link-text">Users</span></a>
+  <a href="logs.html"><i class="fas fa-history"></i><span class="link-text">Activity Logs</span></a>
+</div>
+
+<style>
+  .sidebar {
+    width: 250px;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #2c3e50;
+    padding-top: 20px;
+    color: white;
+    z-index: 998;
+  }
+
+  .sidebar.collapsed {
+    width: 60px;
+  }
+
+  .sidebar a {
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    margin: 10px 0;
+    white-space: nowrap;
+  }
+
+  .sidebar a:hover {
+    background-color: #34495e;
+  }
+
+  .sidebar a i {
+    margin-right: 10px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .sidebar.collapsed .link-text {
+    display: none;
+  }
+
+  .sidebar-title {
+    padding: 0 20px 20px;
+    font-size: 18px;
+  }
+
+  .sidebar.collapsed .sidebar-title {
+    display: none;
+  }
+
+  #toggleSidebarBtn {
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  #toggleSidebarBtn:hover {
+    background-color: #34495e;
+  }
+</style>
+
+<script>
+  const toggleBtn = document.getElementById('toggleSidebarBtn');
+  const sidebar = document.getElementById('sidebar');
+
+  toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+  });
+</script>
