@@ -156,7 +156,7 @@ background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items
     },
     methods: {
       loadItems() {
-        fetch(`/api/items.php?page=${this.page}&search=${this.search}`)
+        fetch(`http://localhost/Inventory%20System/items.php?page=${this.page}&search=${this.search}`)
           .then(res => res.json())
           .then(data => {
             this.items = data.items;
@@ -196,7 +196,7 @@ background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items
       },
       deleteItem(id) {
         if (confirm('Are you sure you want to delete this item?')) {
-          fetch(`/api/items.php?id=${id}`, { method: 'DELETE' })
+          fetch(`http://localhost/Inventory%20System/items.phpid=${id}`, { method: 'DELETE' })
             .then(() => this.loadItems());
         }
       }
