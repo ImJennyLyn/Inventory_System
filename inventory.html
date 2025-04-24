@@ -137,117 +137,117 @@ background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items
     </div>
   </div>
  
-  <script>
-    // Load the sidebar content from an external file
-    fetch('sidebar.html')
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById('sidebar-placeholder').innerHTML = data;
-  
-        const toggleBtn = document.getElementById('toggleSidebarBtn');
-        const sidebar = document.getElementById('sidebar');
-        const content = document.querySelector('.content');
-  
-        toggleBtn.addEventListener('click', () => {
-          sidebar.classList.toggle('collapsed');
-          content.classList.toggle('full-width');
-  
-          toggleBtn.innerHTML = sidebar.classList.contains('collapsed') ? '☰' : '×';
-        });
+<script>
+  // Load the sidebar content from an external file
+  fetch('sidebar.html')
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById('sidebar-placeholder').innerHTML = data;
+
+      const toggleBtn = document.getElementById('toggleSidebarBtn');
+      const sidebar = document.getElementById('sidebar');
+      const content = document.querySelector('.content');
+
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        content.classList.toggle('full-width');
+
+        toggleBtn.innerHTML = sidebar.classList.contains('collapsed') ? '☰' : '×';
       });
-  
-    const { createApp } = Vue;
-    createApp({
-      data() {
-        return {
-          items: [],
-          search: '',
-          page: 1,
-          showModal: false,
-          showEditModal: false, // 🆕 Edit Modal toggle
-          newItem: {
-            name: '',
-            description: '',
-            category: '',
-            stock: '',
-            unit: '',
-            image: null
-          },
-          editItemData: {} // 🆕 Edit item holder
-        };
-      },
-      methods: {
-        loadItems() {
-          fetch(`http://localhost/Inventory%20System/items.php?page=${this.page}&search=${this.search}`)
-            .then(res => res.json())
-            .then(data => {
-              this.items = data.items;
-            });
+    });
+
+  const { createApp } = Vue;
+  createApp({
+    data() {
+      return {
+        items: [],
+        search: '',
+        page: 1,
+        showModal: false,
+        showEditModal: false, // 🆕 Edit Modal toggle
+        newItem: {
+          name: '',
+          description: '',
+          category: '',
+          stock: '',
+          unit: '',
+          image: null
         },
-        handleImage(e) {
-          this.newItem.image = e.target.files[0];
-        },
-        submitForm() {
-          const formData = new FormData();
-          for (const key in this.newItem) {
-            formData.append(key, this.newItem[key]);
-          }
-  
-          fetch('http://localhost/Inventory%20System/add_item.php', {
-            method: 'POST',
-            body: formData
-          })
-          .then(res => res.text())
+        editItemData: {} // 🆕 Edit item holder
+      };
+    },
+    methods: {
+      loadItems() {
+        fetch(`http://localhost/Inventory%20System/items.php?page=${this.page}&search=${this.search}`)
+          .then(res => res.json())
           .then(data => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Success!',
-              text: 'Item has been added successfully.',
-              confirmButtonColor: '#3085d6'
-            });
-            this.showModal = false;
-            this.loadItems();
+            this.items = data.items;
           });
-        },
-  
-        // 🔁 Edit Functionality
-        editItem(id) {
-          const item = this.items.find(i => i.id === id);
-          if (item) {
-            this.editItemData = { ...item };
-            this.showEditModal = true;
-          }
-        },
-        submitEdit() {
-          const formData = new FormData();
-          for (const key in this.editItemData) {
-            formData.append(key, this.editItemData[key]);
-          }
-  
-          fetch('http://localhost/Inventory%20System/update_item.php', {
-            method: 'POST',
-            body: formData
-          })
-          .then(res => res.text())
-          .then(() => {
-            Swal.fire('Updated!', 'Item has been updated.', 'success');
-            this.showEditModal = false;
-            this.loadItems();
+      },
+      handleImage(e) {
+        this.newItem.image = e.target.files[0];
+      },
+      submitForm() {
+        const formData = new FormData();
+        for (const key in this.newItem) {
+          formData.append(key, this.newItem[key]);
+        }
+
+        fetch('http://localhost/Inventory%20System/add_item.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.text())
+        .then(data => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Item has been added successfully.',
+            confirmButtonColor: '#3085d6'
           });
-        },
-  
-        // ❌ Delete from table only
-        deleteItem(id) {
-          this.items = this.items.filter(item => item.id !== id);
-          Swal.fire('Deleted!', 'Item removed from table view.', 'info');
+          this.showModal = false;
+          this.loadItems();
+        });
+      },
+
+      // 🔁 Edit Functionality
+      editItem(id) {
+        const item = this.items.find(i => i.id === id);
+        if (item) {
+          this.editItemData = { ...item };
+          this.showEditModal = true;
         }
       },
-      created() {
-        this.loadItems();
+      submitEdit() {
+        const formData = new FormData();
+        for (const key in this.editItemData) {
+          formData.append(key, this.editItemData[key]);
+        }
+
+        fetch('http://localhost/Inventory%20System/update_item.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.text())
+        .then(() => {
+          Swal.fire('Updated!', 'Item has been updated.', 'success');
+          this.showEditModal = false;
+          this.loadItems();
+        });
+      },
+
+      // ❌ Delete from table only
+      deleteItem(id) {
+        this.items = this.items.filter(item => item.id !== id);
+        Swal.fire('Deleted!', 'Item removed from table view.', 'info');
       }
-    }).mount('#app');
-  </script>
-  
+    },
+    created() {
+      this.loadItems();
+    }
+  }).mount('#app');
+</script>
+
 </body>
 
 </html>
