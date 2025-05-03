@@ -1,3 +1,80 @@
+<?php
+// Include database connection
+include 'db.php';
+
+// Set content type based on the request
+$isApiRequest = isset($_GET['api']); // Check if the request is an API request (for JSON output)
+
+// If it's an API request, process it and return JSON
+if ($isApiRequest) {
+    // Set content type to JSON for API response
+    header('Content-Type: application/json');
+
+    // Check database connection
+    if ($conn->connect_error) {
+        die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
+    }
+
+    // Get date and category filters from the request
+    $dateFilter = isset($_GET['date']) ? $_GET['date'] : '';
+    $categoryFilter = isset($_GET['category']) ? $_GET['category'] : '';
+
+    // Prepare SQL query with optional filters
+    $sql = "SELECT created_at, item, type, quantity FROM stock WHERE 1=1";
+    $params = [];
+
+    if ($dateFilter) {
+        // Validate date format (YYYY-MM-DD)
+        if (DateTime::createFromFormat('Y-m-d', $dateFilter) !== false) {
+            $sql .= " AND created_at >= ?";
+            $params[] = $dateFilter;
+        } else {
+            echo json_encode(["error" => "Invalid date format. Use YYYY-MM-DD."]);
+            exit;
+        }
+    }
+
+    if ($categoryFilter) {
+        $sql .= " AND type = ?";
+        $params[] = $categoryFilter;
+    }
+
+    $sql .= " ORDER BY created_at DESC"; // Optional: Order by creation date
+
+    // Prepare statement
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        echo json_encode(["error" => "Failed to prepare SQL query.", "details" => $conn->error]);
+        exit;
+    }
+
+    // Bind parameters to the query
+    if ($params) {
+        $types = str_repeat('s', count($params)); // Assuming all parameters are strings
+        $stmt->bind_param($types, ...$params);
+    }
+
+    // Execute the query
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Fetch the results
+    $reports = [];
+    while ($row = $result->fetch_assoc()) {
+        $reports[] = $row;
+    }
+
+    // Return the results as JSON
+    echo json_encode($reports);
+
+    // Close connection
+    $stmt->close();
+    $conn->close();
+
+    exit; // End execution here for API requests
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,8 +121,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="r in reports">
-            <td>{{ r.date }}</td>
+          <tr v-for="r in reports" :key="r.created_at">
+            <td>{{ r.created_at }}</td>
             <td>{{ r.item }}</td>
             <td>{{ r.type }}</td>
             <td>{{ r.quantity }}</td>
@@ -56,8 +133,10 @@
   </div>
 
   <script>
-    // Load the sidebar content from an external file
-    fetch('sidebar.html')
+
+
+   // Load the sidebar content from an external file
+   fetch('sidebar.html')
       .then(res => res.text())
       .then(data => {
         document.getElementById('sidebar-placeholder').innerHTML = data;
@@ -92,8 +171,8 @@
       },
       methods: {
         fetchReports() {
-          // Fake API for example
-          fetch('/api/reports.php?date=' + this.dateFilter + '&category=' + this.categoryFilter)
+          // Fetch data from PHP script (API)
+          fetch(window.location.href + '?api=true&date=' + this.dateFilter + '&category=' + this.categoryFilter)
             .then(res => res.json())
             .then(data => {
               this.reports = data;
