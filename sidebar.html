@@ -1,4 +1,3 @@
-<!-- Include Font Awesome CDN for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
 <!-- Toggle Button -->
@@ -6,12 +5,12 @@
 
 <div class="sidebar expanded" id="sidebar">
   <h2 class="sidebar-title">Inventory System</h2>
-  <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span class="link-text">Dashboard</span></a>
-  <a href="inventory.html"><i class="fas fa-boxes"></i><span class="link-text">Inventory</span></a>
-  <a href="stock.html"><i class="fas fa-exchange-alt"></i><span class="link-text">Stock In/Out</span></a>
-  <a href="reports.html"><i class="fas fa-chart-line"></i><span class="link-text">Reports</span></a>
-  <a href="users.html"><i class="fas fa-users"></i><span class="link-text">Users</span></a>
-  <a href="logs.html"><i class="fas fa-history"></i><span class="link-text">Activity Logs</span></a>
+  <a href="dashboard.php" id="dashboardLink"><i class="fas fa-tachometer-alt"></i><span class="link-text">Dashboard</span></a>
+  <a href="inventory.php" id="inventoryLink"><i class="fas fa-boxes"></i><span class="link-text">Inventory</span></a>
+  <a href="stock.php" id="stockLink"><i class="fas fa-exchange-alt"></i><span class="link-text">Stock In/Out</span></a>
+  <a href="reports.php" id="reportsLink"><i class="fas fa-chart-line"></i><span class="link-text">Reports</span></a>
+  <a href="users.php" id="usersLink"><i class="fas fa-users"></i><span class="link-text">Users</span></a>
+  <a href="logs.php" id="logsLink"><i class="fas fa-history"></i><span class="link-text">Activity Logs</span></a>
 </div>
 
 <style>
@@ -23,9 +22,9 @@
     top: 0;
     left: 0;
     height: 100%;
-    background-color: #2c3e50;
+    background-color: white;
     padding-top: 20px;
-    color: white;
+    color: black;
     z-index: 998;
   }
 
@@ -36,7 +35,7 @@
   .sidebar a {
     display: flex;
     align-items: center;
-    color: white;
+    color: black;
     padding: 10px 20px;
     text-decoration: none;
     margin: 10px 0;
@@ -44,7 +43,16 @@
   }
 
   .sidebar a:hover {
-    background-color: #34495e;
+    background-color: #2ecc71;
+    color: white;
+  }
+
+  .sidebar a.active {
+    background-color: #2ecc71 !important;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border-left: 5px solid #27ae60; /* Adds a left border to the active link */
   }
 
   .sidebar a i {
@@ -81,18 +89,31 @@
 </style>
 
 <script>
-    const toggleBtn = document.getElementById('toggleSidebarBtn');
-    const sidebar = document.getElementById('sidebar');
-  
-    toggleBtn.addEventListener('click', () => {
-      // Toggle the "collapsed" class on sidebar
-      sidebar.classList.toggle('collapsed');
+  const toggleBtn = document.getElementById('toggleSidebarBtn');
+  const sidebar = document.getElementById('sidebar');
 
-      // Also toggle the icon (☰ / ×) for better UX
-      if (sidebar.classList.contains('collapsed')) {
-        toggleBtn.innerHTML = '☰'; // Hamburger icon
-      } else {
-        toggleBtn.innerHTML = '×'; // Close icon
-      }
+  toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+    toggleBtn.innerHTML = sidebar.classList.contains('collapsed') ? '☰' : '×';
+  });
+
+  // Highlight clicked link manually
+  const links = sidebar.querySelectorAll('a');
+
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      links.forEach(l => l.classList.remove('active')); // remove from all
+      link.classList.add('active');                     // add to clicked
+      localStorage.setItem('activeSidebarLink', link.id); // store clicked id
     });
+  });
+
+  // Restore last active link on reload
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedId = localStorage.getItem('activeSidebarLink');
+    if (savedId) {
+      const savedLink = document.getElementById(savedId);
+      if (savedLink) savedLink.classList.add('active');
+    }
+  });
 </script>

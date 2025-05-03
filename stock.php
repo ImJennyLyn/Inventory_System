@@ -1,24 +1,63 @@
+<?php
+include 'db.php';
+// Handle API endpoints
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'items') {
+  $result = $conn->query("SELECT id, name FROM inventory");
+  $items = [];
+  while ($row = $result->fetch_assoc()) {
+    $items[] = $row;
+  }
+  echo json_encode($items);
+  exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $data = json_decode(file_get_contents("php://input"), true);
+  $itemId = $conn->real_escape_string($data['item_id']);
+  $type = $conn->real_escape_string($data['type']);
+  $quantity = (int)$data['quantity'];
+  $note = $conn->real_escape_string($data['note']);
+
+  // Check if the item_id exists in the inventory table
+  $checkItemQuery = "SELECT id FROM inventory WHERE id = '$itemId'";
+  $checkResult = $conn->query($checkItemQuery);
+
+  if ($checkResult->num_rows > 0) {
+    // Item exists, proceed with the insertion
+    $sql = "INSERT INTO stock (item_id, type, quantity, note) VALUES ('$itemId', '$type', '$quantity', '$note')";
+    if ($conn->query($sql)) {
+      echo json_encode(['message' => 'Stock recorded successfully.']);
+    } else {
+      echo json_encode(['message' => 'Error: ' . $conn->error]);
+    }
+  } else {
+    // Item doesn't exist
+    echo json_encode(['message' => 'Error: The specified item_id does not exist in the inventory table.']);
+  }
+  exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Stock In/Out</title>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
-    /* Content styling */
-    .content {
-      margin-left: 260px; /* Default margin when sidebar is expanded */
+         .content {
+      margin-left: 260px; 
       padding: 20px;
-      transition: margin-left 0.3s ease; /* Smooth transition */
+      transition: margin-left 0.3s ease; 
     }
-
     .content.full-width {
-      margin-left: 3rem; /* When sidebar is collapsed, content takes full width */
+      margin-left: 3rem; 
     }
   </style>
 </head>
 <body>
-  <div id="sidebar-placeholder"></div>
+<div id="sidebar-placeholder"></div>
 
   <div id="app">
     <div class="content">
@@ -83,7 +122,7 @@
         };
       },
       created() {
-        fetch('/api/items.php')
+        fetch('stock.php?action=items')
           .then(res => res.json())
           .then(data => {
             this.items = data;
@@ -91,7 +130,7 @@
       },
       methods: {
         submitStock() {
-          fetch('/api/stock.php', {
+          fetch('stock.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -102,7 +141,23 @@
             })
           })
           .then(res => res.json())
-          .then(data => alert(data.message));
+          .then(data => {
+            if (data.message.includes('successfully')) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: data.message,
+                confirmButtonText: 'OK'
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.message,
+                confirmButtonText: 'Try Again'
+              });
+            }
+          });
         }
       }
     }).mount('#app');
