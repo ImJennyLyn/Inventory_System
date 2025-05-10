@@ -152,7 +152,7 @@
 <button class="switch-btn switch-btn-left" @click="isRegistering = false">REGISTER</button>
       </div>
 
-       <div class="form-box">
+       <div class="form-box"v-if="!isRegistering" >
         <h2>Register</h2>
         <input v-model="registerData.username" placeholder="Username">
         <input type="password" v-model="registerData.password" placeholder="Password">
@@ -167,7 +167,7 @@
 <button class="switch-btn switch-btn-left" @click="isRegistering = true">Login</button>
 
       </div>
-<div style="margin-left: 25rem;">
+<div style="margin-left: 25rem;"  v-if="isRegistering">
        <div class="form-box">
         <h2>Login</h2>
         <input v-model="loginData.username" placeholder="Username">
