@@ -1,16 +1,15 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
-<!-- Toggle Button -->
 <button id="toggleSidebarBtn" style="position: fixed; top: 10px; left: 10px; z-index: 999;">☰</button>
 
 <div class="sidebar expanded" id="sidebar">
   <h2 class="sidebar-title">Inventory System</h2>
-  <a href="dashboard.php" id="dashboardLink"><i class="fas fa-tachometer-alt"></i><span class="link-text">Dashboard</span></a>
-  <a href="inventory.php" id="inventoryLink"><i class="fas fa-boxes"></i><span class="link-text">Inventory</span></a>
-  <a href="stock.php" id="stockLink"><i class="fas fa-exchange-alt"></i><span class="link-text">Stock In/Out</span></a>
-  <a href="reports.php" id="reportsLink"><i class="fas fa-chart-line"></i><span class="link-text">Reports</span></a>
-  <a href="users.php" id="usersLink"><i class="fas fa-users"></i><span class="link-text">Users</span></a>
-  <a href="logs.php" id="logsLink"><i class="fas fa-history"></i><span class="link-text">Activity Logs</span></a>
+  <a href="dashboard.php" onclick="setActive(this)"><i class="fas fa-tachometer-alt"></i>Dashboard</a>
+  <a href="inventory.php" onclick="setActive(this)"><i class="fas fa-boxes"></i>Inventory</a>
+  <a href="stock.php" onclick="setActive(this)"><i class="fas fa-exchange-alt"></i>Stock In/Out</a>
+  <a href="reports.php" onclick="setActive(this)"><i class="fas fa-chart-line"></i>Reports</a>
+  <a href="users.php" onclick="setActive(this)"><i class="fas fa-users"></i>Users</a>
+  <a href="logs.php" onclick="setActive(this)"><i class="fas fa-history"></i>Activity Logs</a>
 </div>
 
 <style>
@@ -22,7 +21,7 @@
     top: 0;
     left: 0;
     height: 100%;
-    background-color: white;
+    background-color: rgb(1, 14, 24);
     padding-top: 20px;
     color: black;
     z-index: 998;
@@ -32,27 +31,25 @@
     width: 60px;
   }
 
+  .sidebar-title {
+    padding: 0 20px 20px;
+    font-size: 18px;
+  }
+
+  .sidebar.collapsed .sidebar-title,
+  .sidebar.collapsed .link-text {
+    display: none;
+  }
+
   .sidebar a {
     display: flex;
     align-items: center;
-    color: black;
-    padding: 10px 20px;
+    color: rgb(148, 148, 150);
+    padding: 12px 20px;
     text-decoration: none;
-    margin: 10px 0;
-    white-space: nowrap;
-  }
-
-  .sidebar a:hover {
-    background-color: #2ecc71;
-    color: white;
-  }
-
-  .sidebar a.active {
-    background-color: #2ecc71 !important;
-    color: white;
-    padding: 10px 20px;
+    margin: 5px 10px;
     border-radius: 5px;
-    border-left: 5px solid #27ae60; /* Adds a left border to the active link */
+    transition: background-color 0.2s ease;
   }
 
   .sidebar a i {
@@ -61,17 +58,15 @@
     text-align: center;
   }
 
-  .sidebar.collapsed .link-text {
-    display: none;
+  .sidebar a:hover {
+    background-color: #3db6a8;
+    color: white;
   }
 
-  .sidebar-title {
-    padding: 0 20px 20px;
-    font-size: 18px;
-  }
-
-  .sidebar.collapsed .sidebar-title {
-    display: none;
+  .sidebar a.active {
+    background-color: #186642;
+    color: white;
+    border-left: 5px solid #27ae60;
   }
 
   #toggleSidebarBtn {
@@ -89,31 +84,37 @@
 </style>
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
   const toggleBtn = document.getElementById('toggleSidebarBtn');
   const sidebar = document.getElementById('sidebar');
 
+  // Toggle Sidebar
   toggleBtn.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
     toggleBtn.innerHTML = sidebar.classList.contains('collapsed') ? '☰' : '×';
   });
 
-  // Highlight clicked link manually
-  const links = sidebar.querySelectorAll('a');
+  // Get current file name
+  const currentPage = window.location.pathname.split('/').pop();
+  console.log("Current Page:", currentPage); // Debugging
 
-  links.forEach(link => {
-    link.addEventListener('click', () => {
-      links.forEach(l => l.classList.remove('active')); // remove from all
-      link.classList.add('active');                     // add to clicked
-      localStorage.setItem('activeSidebarLink', link.id); // store clicked id
-    });
-  });
-
-  // Restore last active link on reload
-  window.addEventListener('DOMContentLoaded', () => {
-    const savedId = localStorage.getItem('activeSidebarLink');
-    if (savedId) {
-      const savedLink = document.getElementById(savedId);
-      if (savedLink) savedLink.classList.add('active');
+  // Loop through all links to check the active state
+  sidebar.querySelectorAll('a').forEach(link => {
+    const linkPage = link.getAttribute('href').split('/').pop();
+    console.log("Comparing:", linkPage, "vs", currentPage); // Debugging
+    if (linkPage === currentPage) {
+      link.classList.add('active');
     }
   });
+});
+
+// Function to manually set active class on click
+function setActive(clickedLink) {
+  // Remove active class from all links
+  document.querySelectorAll('.sidebar a').forEach(link => {
+    link.classList.remove('active');
+  });
+  // Add active class to the clicked link
+  clickedLink.classList.add('active');
+}
 </script>
