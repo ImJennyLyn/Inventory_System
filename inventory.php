@@ -117,23 +117,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
+    .body {
+     background-color: rgb(1, 14, 24);
+
+    }
       .content {
       margin-left: 260px; /* Default margin when sidebar is expanded */
       padding: 20px;
       transition: margin-left 0.3s ease; /* Smooth transition */
+
+
     }
     .content.full-width {
       margin-left: 3rem; /* When sidebar is collapsed, content takes full width */
+
     }
 
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    table { width: 100%; 
+      border-collapse: collapse;
+       margin-top: 20px;
+       color: white;
+     }
     th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
-    th { background-color: #f2f2f2; }
+    th { background-color:rgb(13, 20, 44); }
     input, button { margin: 5px; padding: 6px; }
   </style>
 </head>
-<body>
-<div id="sidebar-placeholder"></div>
+<body style="background-color: rgb(1, 14, 24);">
+  <div id="sidebar-placeholder"></div>
+
 
 <div id="app">
   <!-- Add/Edit Modal -->
@@ -165,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <button @click="loadItems">Search</button>
     <button @click="openAddModal">Add Item</button>
 
-    <table>
+    <table class="table">
       <thead>
         <tr>
           <th>Name</th><th>Description</th><th>Category</th><th>Quantity</th><th>Unit</th><th>Image</th><th>Status</th><th>Actions</th>
