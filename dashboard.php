@@ -19,8 +19,8 @@
 </head>
 <body>
   <!-- Placeholder for the Sidebar -->
+  <!-- <button id="toggleSidebarBtn" style="position: fixed; top: 20px; left: 20px; z-index: 1000;">☰</button> -->
   <div id="sidebar-placeholder"></div>
-
   <!-- Main Content -->
   <div id="app">
     <div class="content">
