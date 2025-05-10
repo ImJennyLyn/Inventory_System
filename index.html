@@ -2,59 +2,207 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Login</title>
+  <title>Login/Register UI</title>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    background-color: rgb(2, 17, 28);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 800px;
+      height: 500px;
+    background-color: rgb(11, 34, 50);
+      display: flex;
+      position: relative;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .form-box {
+      width: 50%;
+      padding: 40px;
+      position: absolute;
+      top: 0;
+      height: 100%;
+      transition: all 0.5s ease;
+    }
+
+    .left {
+      left: 0;
+      background: #2dbeb2;
+      transform: translateX(0%);
+      z-index: 1;
+            border-bottom-right-radius:5rem ;
+            border-top-right-radius:5rem ;
+    }
+
+    .right {
+      right: 0;
+      background: #2dbeb2;
+      transform: translateX(100%);
+      z-index: 2;
+      border-bottom-left-radius:5rem ;
+            border-top-left-radius:5rem ;
+
+    }
+    login-box {
+       transform: translateX(100%);
+      z-index: 2;
+      right: 0;
+      width: 50%;
+      padding: 40px;
+      position: absolute;
+      
+      height: 100%;
+      transition: all 0.5s ease;
+      margin-right: 3rem;
+    }
+
+    .active .left {
+      transform: translateX(-100%);
+      z-index: 2;
+    }
+
+    .active .right {
+      transform: translateX(0%);
+      z-index: 1;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 15px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background: #2196F3;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1976D2;
+    }
+
+    .switch-btn {
+      margin-top: 10px;
+      background: transparent;
+      color: #555;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <div id="app">
-    <h2>Login</h2>
+    <div class="container" :class="{ active: !isRegistering }">
+
+      <!-- Register Form -->
+      <div class="form-box left">
+        <!-- <h2>Register</h2>
+        <input v-model="registerData.username" placeholder="Username">
+        <input type="password" v-model="registerData.password" placeholder="Password">
+        <button @click="register">Register</button> -->
+        <p class="switch-btn" @click="isRegistering = false">REGISTER</p>
+      </div>
+
+       <div class="form-box">
+        <h2>Register</h2>
+        <input v-model="registerData.username" placeholder="Username">
+        <input type="password" v-model="registerData.password" placeholder="Password">
+        <button @click="register">Register</button>
+        <p class="switch-btn" @click="isRegistering = true">Don't have an account? Register</p>
+      </div>
+
+
+      <!-- Login Form -->
+      <div class="form-box right">
+        <h2>Hello, Welcome</h2>
     
-    <input v-model="username" placeholder="Username" />
-    <input type="password" v-model="password" placeholder="Password" />
-    
-    <button @click="login">Login</button>
-    
+                <p class="switch-btn" @click="isRegistering = true"> Login</p>
+
+      </div>
+<div style="margin-left: 25rem;">
+       <div class="form-box">
+        <h2>Login</h2>
+        <input v-model="loginData.username" placeholder="Username">
+        <input type="password" v-model="loginData.password" placeholder="Password">
+        <button @click="login">Login</button>
+      </div>
+</div>
+    </div>
+
     <p>{{ message }}</p>
-    
-    <!-- Register Redirect Button -->
-    <p>
-      Don't have an account?
-      <button @click="goToRegister">Register</button>
-    </p>
   </div>
 
   <script>
     const { createApp } = Vue;
+
     createApp({
       data() {
         return {
-          username: '',
-          password: '',
+          isRegistering: true, // Start with register form
+          loginData: {
+            username: '',
+            password: ''
+          },
+          registerData: {
+            username: '',
+            password: ''
+          },
           message: ''
-        }
+        };
       },
       methods: {
         login() {
           fetch('http://localhost/Inventory System/login.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              username: this.username,
-              password: this.password
-            })
+            body: JSON.stringify(this.loginData)
           })
           .then(res => res.json())
           .then(data => {
             if (data.status === "success") {
               this.message = "Login successful! Welcome, " + data.username;
-              window.location.href = "dashboard.html"; // Redirect to dashboard
+              window.location.href = "dashboard.php";
             } else {
               this.message = "Login failed: " + data.message;
             }
           });
         },
-        goToRegister() {
-          window.location.href = "register.html";
+        register() {
+          fetch('http://localhost/Inventory System/register.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(this.registerData)
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.status === "success") {
+              this.message = "Registration successful! You can now log in.";
+              this.isRegistering = false;
+            } else {
+              this.message = "Registration failed: " + data.message;
+            }
+          });
         }
       }
     }).mount('#app');
