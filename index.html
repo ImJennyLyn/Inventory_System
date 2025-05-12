@@ -112,8 +112,8 @@
       width: 50%;
       padding: 40px;
       position: absolute;
-      
-      height: 100%;
+      width: 100%;
+     
       transition: all 0.5s ease;
       margin-right: 3rem;
     }
@@ -129,12 +129,15 @@
     }
 
     input {
+      margin-top: 4rem;
       display: block;
       width: 100%;
+      height:40px;
       padding: 10px;
       margin: 15px 0;
-      border: 1px solid #ccc;
+      border: 1px solid #dbdadc;
       border-radius: 6px;
+      background-color: #e9e8eb;
     }
 
     button {
@@ -179,6 +182,8 @@
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: background 0.3s ease, transform 0.2s ease;
+  width:100%;
+  margin-top: 1rem;
 
 }
 
@@ -200,7 +205,7 @@
        <div class="form-box"v-if="!isRegistering" >
         <h2>Register</h2>
 
-        <input v-model="registerData.username" placeholder="Username">
+        <input v-model="registerData.username" placeholder="Username" >
         <input type="password" v-model="registerData.password" placeholder="Password">
 <button class="primary-btn" @click="register">Register</button>
       </div>
@@ -218,7 +223,7 @@
 <div style="margin-left: 25rem;"  v-if="isRegistering">
        <div class="form-box">
         <h2>Login</h2>
-        <input v-model="loginData.username" placeholder="Username">
+        <input v-model="loginData.username" placeholder="Username" class="username">
         <input type="password" v-model="loginData.password" placeholder="Password">
         <button class="login-btn" @click="login">Login</button>
       </div>
