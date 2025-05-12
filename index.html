@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <title>Login/Register UI</title>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+      <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -46,8 +50,28 @@
       z-index: 1;
             border-bottom-right-radius:5rem ;
             border-top-right-radius:5rem ;
-    }
-
+           
+          }
+          .left h2 {
+             transform: translateX(0%);
+      z-index: 1;
+            border-bottom-right-radius:5rem ;
+            border-top-right-radius:5rem ;
+            font-family: 
+            'Poppins', sans-serif;
+            color: white;
+            font-size: 30px;
+          }
+.left p {
+             transform: translateX(0%);
+      z-index: 1;
+            border-bottom-right-radius:5rem ;
+            border-top-right-radius:5rem ;
+            font-family: 
+            'Poppins', sans-serif;
+            color: white;
+            font-size: 15px;
+          }
     .right {
       right: 0;
       background: #978aca;
@@ -63,7 +87,7 @@
   font-size: 16px;
   font-weight: bold;
   border: none;
-  background: linear-gradient(to right, #00bfa5, #1de9b6);
+  background: linear-gradient(to right, #978aca,  #a596e3);
   color: white;
   border-radius: 8px;
   cursor: pointer;
@@ -72,9 +96,14 @@
 }
 
 .primary-btn:hover {
-  background: linear-gradient(to right, #00bfa5, #00acc1);
+  background: linear-gradient(to right,#978aca,  #a596e3);
   transform: translateY(-2px);
 }
+.login-btn:hover {
+  background: linear-gradient(to right,#978aca,  #a596e3);
+  transform: translateY(-2px);
+}
+
 
     login-box {
        transform: translateX(100%);
@@ -125,8 +154,8 @@
   margin-top: 15px;
   padding: 10px 20px;
   background: none;
-  border: 2px solid #007BFF;
-  color: #007BFF;
+  border: 2px solid #ffffff;
+  color: #ffffff;
   font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
@@ -135,8 +164,22 @@
 }
 
 .switch-btn:hover {
-  background-color: #007BFF;
+ background: white;
+ color: #978aca;  
+}
+
+.login-btn {
+   padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  background: linear-gradient(to right, #978aca,  #a596e3);
   color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease, transform 0.2s ease;
+
 }
 
   </style>
@@ -148,12 +191,15 @@
       <!-- Register Form -->
       <div class="form-box left">
                 <h2>Hello, Welcome</h2>
+                                <p>Don't have an account?</p>
+
 
 <button class="switch-btn switch-btn-left" @click="isRegistering = false">REGISTER</button>
       </div>
 
        <div class="form-box"v-if="!isRegistering" >
         <h2>Register</h2>
+
         <input v-model="registerData.username" placeholder="Username">
         <input type="password" v-model="registerData.password" placeholder="Password">
 <button class="primary-btn" @click="register">Register</button>
@@ -163,6 +209,8 @@
       <!-- Login Form -->
       <div class="form-box right">
         <h2>Hello, Welcome</h2>
+                <p>Already have an account?</p>
+
     
 <button class="switch-btn switch-btn-left" @click="isRegistering = true">Login</button>
 
@@ -172,7 +220,7 @@
         <h2>Login</h2>
         <input v-model="loginData.username" placeholder="Username">
         <input type="password" v-model="loginData.password" placeholder="Password">
-        <button @click="login">Login</button>
+        <button class="login-btn" @click="login">Login</button>
       </div>
 </div>
     </div>
