@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     .body {
-     background-color: rgb(1, 14, 24);
+     background-color: rgb(255, 255, 255);
 
     }
       .content {
@@ -136,16 +136,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     table { width: 100%; 
       border-collapse: collapse;
        margin-top: 20px;
-       color: white;
+       color: black;
      }
     th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
-    th { background-color:rgb(13, 20, 44); }
+    th { background-color:rgb(255, 255, 255); }
     input, button { margin: 5px; padding: 6px; }
   </style>
 </head>
-<body style="background-color: rgb(1, 14, 24);">
+<body >
   <div id="sidebar-placeholder"></div>
-
 
 <div id="app">
   <!-- Add/Edit Modal -->
