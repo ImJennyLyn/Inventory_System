@@ -1,11 +1,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
 <button id="toggleSidebarBtn" style="position: fixed; top: 10px; left: 10px; z-index: 999;">☰</button>
-<div class="topbar">
+<!-- <div class="topbar">
   <div class="topbar-title">Dashboard</div>
   <div class="topbar-logout">
     <a href="index.html" class="logout-btn"><i class="fas fa-sign-out-alt" style="color: rgb(52, 198, 217);"></i> Logout</a>
-  </div>
+  </div> -->
 </div>
 
 
@@ -20,13 +20,13 @@
 </div>
 
 <style>
-  .topbar {
+  /* .topbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 50px;
-    background-color: rgb(2, 17, 28);
+    background-color:white;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -39,7 +39,7 @@
 .topbar-title {
   font-size: 20px;
   font-weight: bold;
-}
+} */
 
 .topbar-logout .logout-btn {
   color: white;
@@ -60,12 +60,12 @@
     transition: width 0.3s ease;
     overflow: hidden;
     position: fixed;
-    top: 50px;
+    top: 0px;
     left: 0;
     height: 100%;
-    background-color: rgb(2, 17, 28);
+    background-color:#978aca;
     padding-top: 20px;
-    color: black;
+    color: rgb(255, 255, 255);
     z-index: 998;
   }
 
@@ -86,7 +86,7 @@
   .sidebar a {
     display: flex;
     align-items: center;
-    color: rgb(148, 148, 150);
+    color: rgb(255, 255, 255);
     padding: 12px 20px;
     text-decoration: none;
     margin: 5px 10px;
@@ -101,12 +101,12 @@
   }
 
   .sidebar a:hover {
-    background-color: #3db6a8;
-    color: white;
+    background-color:white;
+    color:#978aca;
   }
 
   .sidebar a.active {
-    background-color: #186642;
+    background-color:#978aca;
     color: white;
     border-left: 5px solid #27ae60;
   }
